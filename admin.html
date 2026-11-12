@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | The English Language Academy (Jafor Iqbal)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- External Separate Admin Stylesheet -->
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+    <!-- 1. LOGIN OVERLAY (লগইন স্ক্রিন - ডায়নামিক Username ও Password যাচাই) -->
+    <div class="login-wrapper" id="loginWrapper">
+        <div class="login-card">
+            <img src="images/academy-logo.jpg" alt="Logo" class="login-brand-logo">
+            <h2>The English Language Academy</h2>
+            <p>Jafor Iqbal – Admin Control Panel</p>
+            <div class="login-divider"></div>
+
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group" style="text-align: left; margin-bottom: 15px;">
+                    <label for="loginUser">অ্যাডমিন ইউজারনেম (Username)</label>
+                    <input type="text" id="loginUser" class="form-control" placeholder="admin" required>
+                </div>
+                <div class="form-group" style="text-align: left; margin-bottom: 15px;">
+                    <label for="loginPass">পাসওয়ার্ড (Password)</label>
+                    <input type="password" id="loginPass" class="form-control" placeholder="admin123" required>
+                </div>
+                <div id="loginError" style="color: var(--danger); font-size: 0.85rem; margin-bottom: 15px; display: none;"></div>
+                <button type="submit" class="btn btn-gold" style="width: 100%; justify-content: center; padding: 12px; font-weight: 700;">
+                    ড্যাশবোর্ডে প্রবেশ করুন ➔
+                </button>
+            </form>
+            <p style="margin-top: 20px; font-size: 0.85rem; color: #888;">
+                <a href="index.html" style="color: var(--info); text-decoration: none;">← পাবলিক ওয়েবসাইটে ফিরে যান</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- 2. MAIN ADMIN APP (ড্যাশবোর্ড ও সাইট ম্যানেজমেন্ট) -->
+    <div id="appWrapper" style="display: none; width: 100%; min-height: 100vh;">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <img src="images/academy-logo.jpg" alt="Logo" class="sidebar-logo">
+                <div class="sidebar-title">
+                    <h3>Jafor Iqbal</h3>
+                    <span>The English Language Academy</span>
+                </div>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link active" data-tab="dashboard">
+                        <span class="icon">📊</span>
+                        <span>ড্যাশবোর্ড (Dashboard)</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link" data-tab="hero">
+                        <span class="icon">🎯</span>
+                        <span>হোমপেজ ও ব্যানার</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link" data-tab="teacher">
+                        <span class="icon">👨‍🏫</span>
+                        <span>শিক্ষক পরিচিতি (Teacher)</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link" data-tab="orders">
+                        <span class="icon">🛒</span>
+                        <span>বইয়ের অর্ডার (Orders)</span>
+                        <span class="sidebar-badge" id="badgeOrderCount" style="display: none; background: #e74c3c;">0</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link" data-tab="admissions">
+                        <span class="icon">🎓</span>
+                        <span>ভর্তি আবেদন (Admissions)</span>
+                        <span class="sidebar-badge" id="badgeAdmCount" style="display: none; background: #2ecc71;">0</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link" data-tab="notices">
+                        <span class="icon">📢</span>
+                        <span>নোটিশ ও ভর্তি বিজ্ঞপ্তি</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link" data-tab="courses">
+                        <span class="icon">📝</span>
+                        <span>কোর্সসমূহ (Courses)</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link" data-tab="books">
+                        <span class="icon">📚</span>
+                        <span>বই ও দাম (Books)</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link" data-tab="videos">
+                        <span class="icon">🎬</span>
+                        <span>ভিডিও (YT &amp; FB Videos)</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link" data-tab="gallery">
+                        <span class="icon">🖼️</span>
+                        <span>ফটো গ্যালারি (Gallery)</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link" data-tab="about">
+                        <span class="icon">🏛️</span>
+                        <span>About ও একাডেমি</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link" data-tab="contact">
+                        <span class="icon">📞</span>
+                        <span>যোগাযোগ ও সোশ্যাল লিংক</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link" data-tab="messages">
+                        <span class="icon">✉️</span>
+                        <span>ইনবক্স বার্তা (Messages)</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link" data-tab="settings">
+                        <span class="icon">⚙️</span>
+                        <span>সেটিংস ও নিরাপত্তা</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <a href="index.html" target="_blank" class="btn btn-sm btn-outline" style="color: white; border-color: rgba(255,255,255,0.2); width: 100%; justify-content: center;">
+                    🌐 ওয়েবসাইট দেখুন
+                </a>
+                <button onclick="handleLogout()" class="btn btn-sm btn-danger" title="Logout" style="margin-top: 8px;">🚪 লগআউট</button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="admin-main">
+            <!-- Header Bar -->
+            <header class="admin-header">
+                <button class="mobile-nav-toggle" id="mobileNavToggle">☰</button>
+                <div class="admin-header-title">
+                    <h2 id="adminPageTitle">Admin Dashboard Overview</h2>
+                    <p>The English Language Academy – পূর্ণাঙ্গ ওয়েবসাইট নিয়ন্ত্রণ ও পর্যবেক্ষণ</p>
+                </div>
+                <div class="admin-header-actions">
+                    <span id="adminLoggedInUserDisplay" style="font-size: 0.85rem; color: #64748b; font-weight: 600; margin-right: 8px;">👤 admin</span>
+                    <a href="index.html" target="_blank" class="btn btn-sm btn-gold">লাইভ সাইট ↗</a>
+                    <button onclick="handleLogout()" class="btn btn-sm btn-outline">লগআউট</button>
+                </div>
+            </header>
+
+            <div class="admin-body">
+                
+                <!-- ==================== TAB 1: DASHBOARD ==================== -->
+                <div class="tab-panel" id="panel-dashboard">
+                    <div class="stats-cards-grid">
+                        <div class="stat-metric-card" onclick="switchTab('orders')" style="cursor: pointer;">
+                            <div class="metric-icon-box gold">🛒</div>
+                            <div class="metric-data">
+                                <h3 id="metricOrders">0</h3>
+                                <span>Total Orders (বইয়ের অর্ডার)</span>
+                            </div>
+                        </div>
+                        <div class="stat-metric-card" onclick="switchTab('admissions')" style="cursor: pointer;">
+                            <div class="metric-icon-box blue">🎓</div>
+                            <div class="metric-data">
+                                <h3 id="metricAdmissions">0</h3>
+                                <span>Total Students (ভর্তি আবেদন)</span>
+                            </div>
+                        </div>
+                        <div class="stat-metric-card" onclick="switchTab('courses')" style="cursor: pointer;">
+                            <div class="metric-icon-box navy">📝</div>
+                            <div class="metric-data">
+                                <h3 id="metricCourses">0</h3>
+                                <span>Total Courses (মোট কোর্স)</span>
+                            </div>
+                        </div>
+                        <div class="stat-metric-card" onclick="switchTab('books')" style="cursor: pointer;">
+                            <div class="metric-icon-box gold">📚</div>
+                            <div class="metric-data">
+                                <h3 id="metricBooks">0</h3>
+                                <span>Total Books (বইয়ের সংখ্যা)</span>
+                            </div>
+                        </div>
+                        <div class="stat-metric-card" onclick="switchTab('videos')" style="cursor: pointer;">
+                            <div class="metric-icon-box red">🎬</div>
+                            <div class="metric-data">
+                                <h3 id="metricVideos">0</h3>
+                                <span>Total Videos (ভিডিও)</span>
+                            </div>
+                        </div>
+                        <div class="stat-metric-card" onclick="switchTab('notices')" style="cursor: pointer;">
+                            <div class="metric-icon-box blue">📢</div>
+                            <div class="metric-data">
+                                <h3 id="metricNotices">0</h3>
+                                <span>Notices &amp; Circulars</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Orders Table -->
+                    <div class="content-card" style="margin-top: 25px;">
+                        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <h3>🛒 সাম্প্রতিক বইয়ের অর্ডারসমূহ (Recent Orders)</h3>
+                                <p>গ্রাহকদের সদ্য করা অর্ডারের বিবরণ ও স্ট্যাটাস</p>
+                            </div>
+                            <button class="btn btn-sm btn-gold" onclick="switchTab('orders')">সব অর্ডার দেখুন ➔</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>অর্ডার আইডি</th>
+                                        <th>গ্রাহকের নাম ও ফোন</th>
+                                        <th>বইয়ের নাম</th>
+                                        <th>পরিমাণ ও মোট মূল্য</th>
+                                        <th>স্ট্যাটাস</th>
+                                        <th>যোগাযোগ</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recentOrdersTableBody">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Recent Admissions Table -->
+                    <div class="content-card" style="margin-top: 25px;">
+                        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <h3>🎓 সাম্প্রতিক ভর্তি আবেদনসমূহ (New Applications)</h3>
+                                <p>শিক্ষার্থীদের পাঠানো অনলাইন ভর্তি ফর্মের তালিকা</p>
+                            </div>
+                            <button class="btn btn-sm btn-primary" onclick="switchTab('admissions')">সব আবেদন দেখুন ➔</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>রোল নং</th>
+                                        <th>শিক্ষার্থী ও ফোন</th>
+                                        <th>পিতা-মাতার নাম</th>
+                                        <th>নির্বাচিত কোর্স</th>
+                                        <th>স্ট্যাটাস</th>
+                                        <th>যোগাযোগ</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recentAdmissionsTableBody">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== TAB 2: HERO & HOMEPAGE ==================== -->
+                <div class="tab-panel" id="panel-hero" style="display: none;">
+                    <div class="content-card">
+                        <div class="card-header">
+                            <h3>Homepage &amp; Banner Management</h3>
+                            <p>ওয়েবসাইটের শীর্ষ ব্যানার, শিক্ষক নাম, পদবি এবং ব্যানার ছবি এডিট (ডিভাইস থেকে আপলোড বা সরাসরি লিংকের মাধ্যমে)</p>
+                        </div>
+
+                        <form id="heroForm" onsubmit="handleHeroSubmit(event)">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="heroNameInput">শিক্ষক / মূল শিরোনাম *</label>
+                                    <input type="text" id="heroNameInput" class="form-control" value="Writer – Jafor Iqbal" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="heroBadgeInput">টপ ব্যাজ টেক্সট</label>
+                                    <input type="text" id="heroBadgeInput" class="form-control" value="✦ The English Language Academy · Founder & CEO">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="heroSubtitleInput">মূল সাবটাইটেল (ডিগ্রি ও পদবি)</label>
+                                <input type="text" id="heroSubtitleInput" class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="heroTypingInput">টাইপিং অ্যানিমেশনের বাক্যসমূহ (প্রতি লাইনে একটি করে বাক্য লিখুন)</label>
+                                <textarea id="heroTypingInput" class="form-control" rows="5"></textarea>
+                            </div>
+
+                            <!-- ব্যানার ছবি (ডিভাইস থেকে ফাইল আপলোড বা সরাসরি লিংক) -->
+                            <div class="form-group">
+                                <label>ব্যানার ব্যাকগ্রাউন্ড ছবি (Banner Image)</label>
+                                <div class="image-input-container">
+                                    <div class="image-picker-tabs">
+                                        <button type="button" class="image-tab-btn active" onclick="switchImageInputMode('heroBg', 'upload')">📁 ডিভাইস থেকে আপলোড</button>
+                                        <button type="button" class="image-tab-btn" onclick="switchImageInputMode('heroBg', 'link')">🔗 সরাসরি ইমেজ লিংক</button>
+                                    </div>
+                                    <div id="heroBg-upload-box">
+                                        <input type="file" accept="image/*" class="form-control" onchange="handleFileUpload(event, 'heroBgInput', 'heroBgPreview')">
+                                    </div>
+                                    <div id="heroBg-link-box" style="display: none;">
+                                        <input type="text" id="heroBgInput" class="form-control" placeholder="images/hero-photo.jpg বা https://..." oninput="updateImagePreview('heroBgInput', 'heroBgPreview')">
+                                    </div>
+                                    <img id="heroBgPreview" src="images/sir_pic_2.jpg" class="image-preview-thumb" alt="Hero BG Preview">
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-gold" style="margin-top: 15px;">পরিবর্তন সংরক্ষণ করুন ✓</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- ==================== TAB 3: TEACHER INFO (শিক্ষক পরিচিতি) ==================== -->
+                <div class="tab-panel" id="panel-teacher" style="display: none;">
+                    <div class="content-card">
+                        <div class="card-header">
+                            <h3>Teacher Information Management (শিক্ষক তথ্য)</h3>
+                            <p>ছবির পাশে ক্রমানুসারে নাম ও পরিচয় (Writer – Jafor Iqbal), শিক্ষাগত যোগ্যতা, পেশাগত অভিজ্ঞতা, বিশেষ দক্ষতা ও সোশ্যাল লিংক</p>
+                        </div>
+
+                        <form id="teacherForm" onsubmit="handleTeacherSubmit(event)">
+                            
+                            <!-- শিক্ষকের ছবি (ডিভাইস থেকে আপলোড বা লিংক) -->
+                            <div class="form-group">
+                                <label>শিক্ষকের ছবি (Teacher Photo - বাম পাশে প্রদর্শিত হবে)</label>
+                                <div class="image-input-container">
+                                    <div class="image-picker-tabs">
+                                        <button type="button" class="image-tab-btn active" onclick="switchImageInputMode('teacherPhoto', 'upload')">📁 ডিভাইস থেকে আপলোড</button>
+                                        <button type="button" class="image-tab-btn" onclick="switchImageInputMode('teacherPhoto', 'link')">🔗 সরাসরি লিংক</button>
+                                    </div>
+                                    <div id="teacherPhoto-upload-box">
+                                        <input type="file" accept="image/*" class="form-control" onchange="handleFileUpload(event, 'teacherPhotoInput', 'teacherPhotoPreview')">
+                                    </div>
+                                    <div id="teacherPhoto-link-box" style="display: none;">
+                                        <input type="text" id="teacherPhotoInput" class="form-control" placeholder="images/sir_pic_1.jpg বা https://..." oninput="updateImagePreview('teacherPhotoInput', 'teacherPhotoPreview')">
+                                    </div>
+                                    <img id="teacherPhotoPreview" src="images/sir_pic_1.jpg" class="image-preview-thumb" alt="Teacher Photo Preview">
+                                </div>
+                            </div>
+
+                            <!-- ১. নাম ও পরিচয় -->
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="teacherNameInput">নাম ও প্রধান পরিচয় * (যেমন: Writer – Jafor Iqbal)</label>
+                                    <input type="text" id="teacherNameInput" class="form-control" value="Writer – Jafor Iqbal" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="teacherVerifiedInput">ভেরিফাইড ব্যাজ টেক্সট</label>
+                                    <input type="text" id="teacherVerifiedInput" class="form-control" value="Verified Educator & Author">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="teacherRolesInput">পদবি ও প্রাতিষ্ঠানিক পরিচয় (Lecturer, CEO, Adjudicator - প্রতি লাইনে একটি)</label>
+                                <textarea id="teacherRolesInput" class="form-control" rows="3" placeholder="প্রভাষক (ইংরেজি), রায়পুরা সরকারি কলেজ&#10;প্রতিষ্ঠাতা ও প্রধান নির্বাহী (CEO), Mirror IELTS & Abroad&#10;অফিসিয়াল বিচারক (Adjudicator), English Olympiad (জাতীয় পর্যায়)"></textarea>
+                            </div>
+
+                            <!-- ২. শিক্ষাগত যোগ্যতা (Educational Qualifications) -->
+                            <div class="form-group">
+                                <label for="teacherQualificationsInput">Educational Qualifications (শিক্ষাগত যোগ্যতা - প্রতি লাইনে একটি ডিগ্রি ও প্রতিষ্ঠান)</label>
+                                <textarea id="teacherQualificationsInput" class="form-control" rows="4" placeholder="M.A. in TESOL — North South University (NSU)&#10;M.A. in Applied Linguistics & ELT — জগন্নাথ বিশ্ববিদ্যালয় (JnU)&#10;B.A. (Hon's) in English Literature & Culture — ঢাকা বিশ্ববিদ্যালয় (DU)"></textarea>
+                            </div>
+
+                            <!-- ৩. পেশাগত অভিজ্ঞতা (Professional Experience) -->
+                            <div class="form-group">
+                                <label for="teacherExperiencesInput">Professional Experience (পেশাগত অভিজ্ঞতা - প্রতি লাইনে একটি)</label>
+                                <textarea id="teacherExperiencesInput" class="form-control" rows="4" placeholder="প্রভাষক (ইংরেজি) — রায়পুরা সরকারি কলেজ (৬+ বছর)&#10;প্রাক্তন বিভাগীয় প্রধান (ইংরেজি) — পিনাকল চার্টার্ড স্কুল অ্যান্ড কলেজ (ইংলিশ ভার্সন)&#10;প্রতিষ্ঠাতা ও প্রধান নির্বাহী (CEO) — Mirror IELTS & Abroad&#10;অফিসিয়াল বিচারক (Adjudicator) — English Olympiad"></textarea>
+                            </div>
+
+                            <!-- ৪. বিশেষ দক্ষতা ও অর্জন (Special Skills & Achievements) -->
+                            <div class="form-group">
+                                <label for="teacherSkillsInput">Special Skills &amp; Achievements (বিশেষ দক্ষতা ও অর্জন - কমা দিয়ে আলাদা করুন)</label>
+                                <textarea id="teacherSkillsInput" class="form-control" rows="3" placeholder="Spoken English Mastery, IELTS Band 8+ Masterclass, Vocabulary Building (The Word Factory), IPA Accent Training, Public Speaking, Academic Writing"></textarea>
+                            </div>
+
+                            <!-- ৫. সোশ্যাল মিডিয়া বাটন -->
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="teacherFbInput">Facebook Profile লিংক</label>
+                                    <input type="url" id="teacherFbInput" class="form-control" placeholder="https://facebook.com/jafor.iqbal.shahib">
+                                </div>
+                                <div class="form-group">
+                                    <label for="teacherFbPageInput">Facebook Page লিংক</label>
+                                    <input type="url" id="teacherFbPageInput" class="form-control" placeholder="https://facebook.com/JaforIqbalEnglishAid">
+                                </div>
+                                <div class="form-group">
+                                    <label for="teacherWaInput">WhatsApp নম্বর (বা লিংক)</label>
+                                    <input type="text" id="teacherWaInput" class="form-control" placeholder="01707236855">
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-gold" style="margin-top: 15px;">শিক্ষক তথ্য সংরক্ষণ করুন ✓</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- ==================== TAB 4: BOOK ORDERS (বই অর্ডার) ==================== -->
+                <div class="tab-panel" id="panel-orders" style="display: none;">
+                    <div class="content-card">
+                        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <h3>🛒 Book Orders Management (বইয়ের অর্ডার)</h3>
+                                <p>গ্রাহকদের তথ্যাদি, নির্বাচিত বই, পরিমাণ, মোট মূল্য এবং স্ট্যাটাস (Pending, Confirmed, Delivered, Cancelled)</p>
+                            </div>
+                            <button class="btn btn-sm btn-outline" onclick="loadOrdersTable()">রিফ্রেশ 🔄</button>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>অর্ডার আইডি</th>
+                                        <th>তারিখ</th>
+                                        <th>গ্রাহকের নাম ও ফোন</th>
+                                        <th>ঠিকানা</th>
+                                        <th>বইয়ের নাম</th>
+                                        <th>পরিমাণ</th>
+                                        <th>মোট মূল্য</th>
+                                        <th>স্ট্যাটাস</th>
+                                        <th>অ্যাকশন</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ordersTableBody">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== TAB 5: ADMISSION APPLICATIONS (ভর্তি আবেদন - পিতা-মাতার নামসহ) ==================== -->
+                <div class="tab-panel" id="panel-admissions" style="display: none;">
+                    <div class="content-card">
+                        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <h3>🎓 Admission Applications Management (ভর্তি আবেদন)</h3>
+                                <p>শিক্ষার্থীদের নাম, পিতা-মাতার নাম, ফোন, ইমেইল, কোর্স, ঠিকানা ও বার্তা (Approve / Reject সুবিধা)</p>
+                            </div>
+                            <button class="btn btn-sm btn-outline" onclick="loadAdmissionsTable()">রিফ্রেশ 🔄</button>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>রোল / আইডি</th>
+                                        <th>তারিখ</th>
+                                        <th>শিক্ষার্থী নাম ও ফোন</th>
+                                        <th>পিতা ও মাতার নাম</th>
+                                        <th>ইমেইল</th>
+                                        <th>কোর্স</th>
+                                        <th>ঠিকানা</th>
+                                        <th>বার্তা (Message)</th>
+                                        <th>স্ট্যাটাস</th>
+                                        <th>অ্যাকশন</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admissionsTableBody">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== TAB 6: NOTICES & CIRCULARS (নোটিশ ও ভর্তি বিজ্ঞপ্তি) ==================== -->
+                <div class="tab-panel" id="panel-notices" style="display: none;">
+                    <div class="content-card">
+                        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <h3>📢 Notice &amp; Admission Circular Management</h3>
+                                <p>শীর্ষ নোটিশ বার এবং ভর্তি বিজ্ঞপ্তি সেকশনের নোটিশ পরিচালনা করুন</p>
+                            </div>
+                            <button class="btn btn-gold" onclick="openAddNoticeModal()">+ নতুন নোটিশ / ভর্তি বিজ্ঞপ্তি যোগ করুন</button>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>ক্যাটাগরি</th>
+                                        <th>শিরোনাম</th>
+                                        <th>তারিখ</th>
+                                        <th>টপ বারে প্রদর্শন?</th>
+                                        <th>অ্যাকশন</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="noticesTableBody">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== TAB 7: COURSES (কোর্সসমূহ) ==================== -->
+                <div class="tab-panel" id="panel-courses" style="display: none;">
+                    <div class="content-card">
+                        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <h3>📝 Courses Management (কোর্স যোগ / এডিট / ডিলিট)</h3>
+                                <p>কোর্সের নাম, কোর্স ফি, মেয়াদ, ব্যাচ শিডিউল, সিলেবাস ও ফিচারসমূহ আপডেট করুন</p>
+                            </div>
+                            <button class="btn btn-gold" onclick="openAddCourseModal()">+ নতুন কোর্স যোগ করুন</button>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>কোর্সের নাম</th>
+                                        <th>কোর্স ফি</th>
+                                        <th>মেয়াদ</th>
+                                        <th>ব্যাচ সময়</th>
+                                        <th>অ্যাকশন</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="coursesTableBody">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== TAB 8: BOOKS & PRICING (বই ও দাম) ==================== -->
+                <div class="tab-panel" id="panel-books" style="display: none;">
+                    <div class="content-card">
+                        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <h3>📚 Books &amp; Pricing Management (বই ও দাম)</h3>
+                                <p>The Word Factory ও English Pro বইয়ের দাম, বিবরণ ও কভার ছবি এডিট করুন (ডিভাইস থেকে আপলোড বা লিংক)</p>
+                            </div>
+                            <button class="btn btn-gold" onclick="openAddBookModal()">+ নতুন বই যোগ করুন</button>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>কভার ছবি</th>
+                                        <th>বইয়ের নাম</th>
+                                        <th>লেখক</th>
+                                        <th>মূল্য (টাকা)</th>
+                                        <th>অ্যাকশন</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="booksTableBody">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== TAB 9: VIDEOS (ভিডিও - স্বয়ংক্রিয় YouTube ও Facebook শনাক্তকরণ) ==================== -->
+                <div class="tab-panel" id="panel-videos" style="display: none;">
+                    <div class="content-card">
+                        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                            <div>
+                                <h3>🎬 Video Management (YouTube &amp; Facebook Auto-Detection)</h3>
+                                <p>যেকোনো YouTube বা Facebook ভিডিওর সাধারণ লিংক পেস্ট করলেই নিজে থেকে প্ল্যাটফর্ম ও সঠিক এম্বেড শনাক্ত হয়!</p>
+                            </div>
+                            <button class="btn btn-gold" onclick="openAddVideoModal()">+ নতুন ভিডিও যোগ করুন</button>
+                        </div>
+
+                        <!-- Video Filter and Search in Admin -->
+                        <div style="display: flex; gap: 15px; margin-bottom: 18px; flex-wrap: wrap;">
+                            <input type="text" id="adminVideoSearch" class="form-control" style="max-width: 300px;" placeholder="🔍 ভিডিও সার্চ করুন..." oninput="filterAdminVideos(this.value)">
+                            <select id="adminVideoFilterSelect" class="form-control" style="max-width: 200px;" onchange="filterAdminVideos()">
+                                <option value="all">সব প্ল্যাটফর্ম</option>
+                                <option value="youtube">YouTube Videos</option>
+                                <option value="facebook">Facebook Videos</option>
+                            </select>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>প্ল্যাটফর্ম</th>
+                                        <th>ভিডিও শিরোনাম ও ক্যাটাগরি</th>
+                                        <th>ভিডিও লিংক</th>
+                                        <th>অ্যাকশন</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="videosTableBody">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== TAB 10: GALLERY (ফটো গ্যালারি) ==================== -->
+                <div class="tab-panel" id="panel-gallery" style="display: none;">
+                    <div class="content-card">
+                        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <h3>🖼️ Photo Gallery Management (আপলোড বা লিংক)</h3>
+                                <p>ছবি ফাইল ডিভাইস থেকে আপলোড করেও যোগ করা যায়, সরাসরি লিংক দিয়েও দেওয়া যায়</p>
+                            </div>
+                            <button class="btn btn-gold" onclick="openAddGalleryModal()">+ নতুন ছবি যোগ করুন</button>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>ছবি প্রিভিউ</th>
+                                        <th>ক্যাপশন / শিরোনাম</th>
+                                        <th>ক্যাটাগরি</th>
+                                        <th>অ্যাকশন</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="galleryTableBody">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== TAB 11: ABOUT & ACADEMY ==================== -->
+                <div class="tab-panel" id="panel-about" style="display: none;">
+                    <div class="content-card">
+                        <div class="card-header">
+                            <h3>About &amp; Academy Management</h3>
+                            <p>দ্য ইংলিশ ল্যাঙ্গুয়েজ একাডেমির লোগো, স্লোগান, ভিশন ও বিস্তারিত তথ্য</p>
+                        </div>
+
+                        <form id="academyForm" onsubmit="handleAcademySubmit(event)">
+                            <div class="form-group">
+                                <label for="academyNameInput">একাডেমির নাম</label>
+                                <input type="text" id="academyNameInput" class="form-control" value="The English Language Academy" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="academyTaglineInput">ট্যাগলাইন / স্লোগান ও বিবরণ</label>
+                                <textarea id="academyTaglineInput" class="form-control" rows="3" required></textarea>
+                            </div>
+
+                            <!-- লোগো (ডিভাইস থেকে আপলোড বা লিংক) -->
+                            <div class="form-group">
+                                <label>একাডেমির অফিসিয়াল লোগো (Academy Logo)</label>
+                                <div class="image-input-container">
+                                    <div class="image-picker-tabs">
+                                        <button type="button" class="image-tab-btn active" onclick="switchImageInputMode('academyLogo', 'upload')">📁 ডিভাইস থেকে আপলোড</button>
+                                        <button type="button" class="image-tab-btn" onclick="switchImageInputMode('academyLogo', 'link')">🔗 সরাসরি লিংক</button>
+                                    </div>
+                                    <div id="academyLogo-upload-box">
+                                        <input type="file" accept="image/*" class="form-control" onchange="handleFileUpload(event, 'academyLogoInput', 'academyLogoPreview')">
+                                    </div>
+                                    <div id="academyLogo-link-box" style="display: none;">
+                                        <input type="text" id="academyLogoInput" class="form-control" placeholder="images/academy-logo.jpg বা https://..." oninput="updateImagePreview('academyLogoInput', 'academyLogoPreview')">
+                                    </div>
+                                    <img id="academyLogoPreview" src="images/academy-logo.jpg" class="image-preview-thumb" alt="Logo Preview">
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-gold" style="margin-top: 15px;">একাডেমি তথ্য সংরক্ষণ করুন ✓</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- ==================== TAB 12: CONTACT & SOCIAL ==================== -->
+                <div class="tab-panel" id="panel-contact" style="display: none;">
+                    <div class="content-card">
+                        <div class="card-header">
+                            <h3>Contact Information &amp; Social Links</h3>
+                            <p>ফোন নম্বর, হোয়াটসঅ্যাপ, ফেসবুক প্রোফাইল, ফেসবুক পেজ ও ঠিকানা আপডেট করুন</p>
+                        </div>
+
+                        <form id="contactForm" onsubmit="handleContactSettingsSubmit(event)">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="conPhone1">প্রধান ফোন নম্বর (WhatsApp সহ)</label>
+                                    <input type="tel" id="conPhone1" class="form-control" placeholder="01707236855" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="conPhone2">দ্বিতীয় ফোন নম্বর</label>
+                                    <input type="tel" id="conPhone2" class="form-control" placeholder="01992785557">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="conWhatsapp">WhatsApp লিংক বা নম্বর</label>
+                                    <input type="text" id="conWhatsapp" class="form-control" placeholder="https://wa.me/8801707236855" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="conEmail">ইমেইল ঠিকানা</label>
+                                    <input type="email" id="conEmail" class="form-control" placeholder="info@mirrorielts.com">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="conFbPersonal">Facebook Profile লিংক</label>
+                                    <input type="url" id="conFbPersonal" class="form-control" placeholder="https://facebook.com/jafor.iqbal.shahib">
+                                </div>
+                                <div class="form-group">
+                                    <label for="conFbPage">Facebook Page লিংক (Jafor Iqbal’s English Aid)</label>
+                                    <input type="url" id="conFbPage" class="form-control" placeholder="https://facebook.com/JaforIqbalEnglishAid">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="conAddress">একাডেমি ও চেম্বারের পূর্ণ ঠিকানা</label>
+                                <textarea id="conAddress" class="form-control" rows="2" placeholder="The English Language Academy, রায়পুরা সরকারি কলেজের সামনে, রায়পুরা, নরসিংদী।"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="conFooterBrand">ফুটার ব্র্যান্ড পরিচিতি টেক্সট</label>
+                                <textarea id="conFooterBrand" class="form-control" rows="2"></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-gold" style="margin-top: 15px;">যোগাযোগ তথ্য আপডেট করুন ✓</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- ==================== TAB 13: MESSAGES INBOX ==================== -->
+                <div class="tab-panel" id="panel-messages" style="display: none;">
+                    <div class="content-card">
+                        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <h3>✉️ ইনবক্স মেসেজ (Direct Messages)</h3>
+                                <p>ওয়েবসাইটের যোগাযোগ ফর্ম থেকে আসা সকল বার্তার তালিকা</p>
+                            </div>
+                            <button class="btn btn-sm btn-outline" onclick="loadMessagesTable()">রিফ্রেশ 🔄</button>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>প্রেরকের নাম</th>
+                                        <th>ইমেইল ও ফোন</th>
+                                        <th>বার্তা</th>
+                                        <th>অ্যাকশন</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="messagesTableBody">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== TAB 14: SETTINGS & SECURITY (Username ও Password পরিবর্তন) ==================== -->
+                <div class="tab-panel" id="panel-settings" style="display: none;">
+                    
+                    <!-- Username ও Password পরিবর্তন ফর্ম -->
+                    <div class="content-card" style="margin-bottom: 30px;">
+                        <div class="card-header">
+                            <h3>🔐 Settings: Username ও Password পরিবর্তন</h3>
+                            <p>
+                                <strong>নিরাপত্তা শর্ত:</strong> বর্তমান পাসওয়ার্ড দিয়ে যাচাইয়ের পর নতুন Username ও নতুন Password সেট করা যাবে এবং পরবর্তী লগইনে নতুন তথ্য প্রযোজ্য হবে।
+                            </p>
+                        </div>
+
+                        <div id="passwordAlertBox" class="security-alert-box"></div>
+
+                        <form id="changeCredentialsForm" onsubmit="handleChangeCredentials(event)" style="max-width: 550px;">
+                            
+                            <!-- ১. বর্তমান পাসওয়ার্ড যাচাই -->
+                            <div class="form-group" style="margin-bottom: 16px;">
+                                <label for="currPasswordInput">বর্তমান পাসওয়ার্ড (Current Password) *</label>
+                                <input type="password" id="currPasswordInput" class="form-control" placeholder="বর্তমান সক্রিয় পাসওয়ার্ড দিন" required>
+                                <small style="color: #64748b;">যাচাই না হওয়া পর্যন্ত কোনো পরিবর্তন কার্যকর হবে না।</small>
+                            </div>
+
+                            <div style="height: 1px; background: #e2e8f0; margin: 18px 0;"></div>
+
+                            <!-- ২. নতুন Username সেট করা -->
+                            <div class="form-group" style="margin-bottom: 16px;">
+                                <label for="newUsernameInput">নতুন Username *</label>
+                                <input type="text" id="newUsernameInput" class="form-control" placeholder="যেমন: admin বা jafor_iqbal" required>
+                            </div>
+
+                            <!-- ৩. নতুন Password সেট করা -->
+                            <div class="form-group" style="margin-bottom: 16px;">
+                                <label for="newPasswordInput">নতুন Password * (কমপক্ষে ৬ অক্ষর)</label>
+                                <input type="password" id="newPasswordInput" class="form-control" placeholder="নতুন নিরাপদ পাসওয়ার্ড" minlength="6" required>
+                            </div>
+
+                            <!-- ৪. Confirm Password দিয়ে মিলিয়ে দেখা -->
+                            <div class="form-group" style="margin-bottom: 22px;">
+                                <label for="confirmNewPasswordInput">Confirm Password (পাসওয়ার্ড নিশ্চিতকরণ) *</label>
+                                <input type="password" id="confirmNewPasswordInput" class="form-control" placeholder="আবার নতুন পাসওয়ার্ডটি লিখুন" required>
+                            </div>
+
+                            <button type="submit" class="btn btn-gold" style="padding: 12px 24px; font-weight: 700;">
+                                Username ও Password পরিবর্তন করুন ✓
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- ডাটা ব্যাকআপ ও রিস্টোর -->
+                    <div class="content-card">
+                        <div class="card-header">
+                            <h3>💾 Backup &amp; Restore (সম্পূর্ণ সাইট ব্যাকআপ)</h3>
+                            <p>ওয়েবসাইটের সকল তথ্য (অর্ডার, ভর্তি আবেদন, কোর্স, বই, নোটিশ, ছবি ও ভিডিও) ব্যাকআপ হিসেবে সংরক্ষণ করুন</p>
+                        </div>
+
+                        <div style="display: flex; gap: 20px; flex-wrap: wrap; align-items: center; margin-top: 15px;">
+                            <button onclick="exportDataBackup()" class="btn btn-gold">
+                                ⬇️ সম্পূর্ণ ব্যাকআপ ডাউনলোড করুন (JSON)
+                            </button>
+
+                            <label class="btn btn-outline" style="cursor: pointer; margin-bottom: 0;">
+                                ⬆️ ব্যাকআপ থেকে সাইট রিস্টোর করুন
+                                <input type="file" accept=".json" onchange="importDataBackup(event)" style="display: none;">
+                            </label>
+
+                            <button onclick="resetAllData()" class="btn btn-danger" style="margin-left: auto;">
+                                ⚠️ ফ্যাক্টরি রিসেট (ডিফল্ট ডাটা)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- ==========================================================================
+         MODALS (মডালসমূহ)
+         ========================================================================== -->
+
+    <!-- 1. VIDEO MODAL (with Realtime Auto-Detect YouTube & Facebook) -->
+    <div class="modal-overlay" id="videoModal">
+        <div class="modal-dialog">
+            <button class="modal-close">&times;</button>
+            <div class="modal-header">
+                <h3 id="videoModalTitle">নতুন ভিডিও যোগ করুন</h3>
+                <p>YouTube বা Facebook ভিডিওর সাধারণ লিংক পেস্ট করলেই নিজে শনাক্ত হবে</p>
+            </div>
+            <form id="videoForm" onsubmit="handleVideoSubmit(event)">
+                <div class="form-group">
+                    <label for="videoUrl">ভিডিও লিংক (URL) *</label>
+                    <input type="url" id="videoUrl" class="form-control" placeholder="https://www.youtube.com/watch?v=... বা https://fb.watch/..." required oninput="handleVideoUrlAutoDetect()">
+                    
+                    <!-- Auto Detect Indicator Badge -->
+                    <div id="videoDetectBadge" class="video-detect-indicator" style="display: none;"></div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="videoPlatform">শনাক্তকৃত প্ল্যাটফর্ম</label>
+                        <select id="videoPlatform" class="form-control">
+                            <option value="youtube">▶ YouTube</option>
+                            <option value="facebook">📘 Facebook</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="videoCategory">ক্যাটাগরি</label>
+                        <select id="videoCategory" class="form-control">
+                            <option value="Spoken English">Spoken English</option>
+                            <option value="IELTS Preparation">IELTS Preparation</option>
+                            <option value="Vocabulary & IPA">Vocabulary &amp; IPA</option>
+                            <option value="Academic English">Academic English (HSC/SSC)</option>
+                            <option value="Live Session">Facebook Live Session</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="videoTitle">ভিডিও শিরোনাম *</label>
+                    <input type="text" id="videoTitle" class="form-control" placeholder="ভিডিওর আকর্ষণীয় শিরোনাম দিন" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="videoDesc">সংক্ষিপ্ত বিবরণ</label>
+                    <textarea id="videoDesc" class="form-control" rows="2" placeholder="ভিডিওটি সম্পর্কে সংক্ষিপ্ত তথ্য..."></textarea>
+                </div>
+
+                <!-- Live Video Preview Inside Modal -->
+                <div id="videoPreviewBox" style="display: none;">
+                    <label style="font-weight: 600; color: #0d1b3e; font-size: 0.9rem;">লাইভ ভিডিও প্রিভিউ:</label>
+                    <div class="video-preview-iframe-wrapper" id="videoPreviewContainer"></div>
+                </div>
+
+                <div class="modal-footer" style="margin-top: 20px;">
+                    <button type="button" class="btn btn-outline modal-cancel">বাতিল</button>
+                    <button type="submit" class="btn btn-gold">সংরক্ষণ করুন ✓</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 2. COURSE MODAL -->
+    <div class="modal-overlay" id="courseModal">
+        <div class="modal-dialog">
+            <button class="modal-close">&times;</button>
+            <div class="modal-header">
+                <h3 id="courseModalTitle">নতুন কোর্স যোগ করুন</h3>
+            </div>
+            <form id="courseForm" onsubmit="handleCourseSubmit(event)">
+                <div class="form-group">
+                    <label for="courseTitle">কোর্সের নাম *</label>
+                    <input type="text" id="courseTitle" class="form-control" placeholder="যেমন: Spoken English Mastery" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="courseFee">কোর্স ফি *</label>
+                        <input type="text" id="courseFee" class="form-control" placeholder="যেমন: ৳৪,৫০০" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="courseDuration">মেয়াদ *</label>
+                        <input type="text" id="courseDuration" class="form-control" placeholder="যেমন: ৩ মাস (৩৬টি ক্লাস)" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="courseBatch">ব্যাচ সময় ও শিডিউল</label>
+                    <input type="text" id="courseBatch" class="form-control" placeholder="যেমন: শনি, সোম, বুধ (সন্ধ্যা ৭:০০)">
+                </div>
+                <div class="form-group">
+                    <label for="courseDesc">সংক্ষিপ্ত বিবরণ</label>
+                    <textarea id="courseDesc" class="form-control" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="courseFeatures">কোর্সের বৈশিষ্ট্যসমূহ (প্রতি লাইনে একটি করে দিন)</label>
+                    <textarea id="courseFeatures" class="form-control" rows="3" placeholder="দৈনিক স্পোকেন ড্রিলিং&#10;ফ্রি মেটেরিয়ালস ও হ্যান্ডনোট&#10;লাইভ ফিডব্যাক সেশন"></textarea>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline modal-cancel">বাতিল</button>
+                    <button type="submit" class="btn btn-gold">কোর্স সংরক্ষণ করুন ✓</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 3. BOOK MODAL (বই ও দাম এডিটর) -->
+    <div class="modal-overlay" id="bookModal">
+        <div class="modal-dialog">
+            <button class="modal-close">&times;</button>
+            <div class="modal-header">
+                <h3 id="bookModalTitle">বই ও দাম এডিট</h3>
+            </div>
+            <form id="bookForm" onsubmit="handleBookSubmit(event)">
+                <div class="form-group">
+                    <label for="bookTitle">বইয়ের নাম *</label>
+                    <input type="text" id="bookTitle" class="form-control" placeholder="The Word Factory" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="bookAuthor">লেখক</label>
+                        <input type="text" id="bookAuthor" class="form-control" value="জাফর ইকবাল" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bookPrice">একক মূল্য (টাকা) *</label>
+                        <input type="number" id="bookPrice" class="form-control" placeholder="450" required>
+                    </div>
+                </div>
+
+                <!-- কভার ছবি (ডিভাইস থেকে আপলোড বা লিংক) -->
+                <div class="form-group">
+                    <label>বইয়ের কভার ছবি</label>
+                    <div class="image-input-container">
+                        <div class="image-picker-tabs">
+                            <button type="button" class="image-tab-btn active" onclick="switchImageInputMode('bookCover', 'upload')">📁 ডিভাইস থেকে আপলোড</button>
+                            <button type="button" class="image-tab-btn" onclick="switchImageInputMode('bookCover', 'link')">🔗 সরাসরি লিংক</button>
+                        </div>
+                        <div id="bookCover-upload-box">
+                            <input type="file" accept="image/*" class="form-control" onchange="handleFileUpload(event, 'bookCoverInput', 'bookCoverPreview')">
+                        </div>
+                        <div id="bookCover-link-box" style="display: none;">
+                            <input type="text" id="bookCoverInput" class="form-control" placeholder="images/hero-photo.jpg বা https://..." oninput="updateImagePreview('bookCoverInput', 'bookCoverPreview')">
+                        </div>
+                        <img id="bookCoverPreview" src="images/hero-photo.jpg" class="image-preview-thumb" alt="Book Cover Preview">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="bookDesc">বইয়ের বিবরণ ও বৈশিষ্ট্য</label>
+                    <textarea id="bookDesc" class="form-control" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="bookTags">ফিচার ট্যাগ (কমা দিয়ে আলাদা করুন)</label>
+                    <input type="text" id="bookTags" class="form-control" placeholder="Oxford 5000 Words, IPA Transcriptions, বাংলা অর্থ">
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline modal-cancel">বাতিল</button>
+                    <button type="submit" class="btn btn-gold">বই সংরক্ষণ করুন ✓</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 4. NOTICE & CIRCULAR MODAL -->
+    <div class="modal-overlay" id="noticeModal">
+        <div class="modal-dialog">
+            <button class="modal-close">&times;</button>
+            <div class="modal-header">
+                <h3 id="noticeModalTitle">নোটিশ / ভর্তি বিজ্ঞপ্তি যোগ করুন</h3>
+            </div>
+            <form id="noticeForm" onsubmit="handleNoticeSubmit(event)">
+                <div class="form-group">
+                    <label for="noticeTitle">শিরোনাম *</label>
+                    <input type="text" id="noticeTitle" class="form-control" placeholder="যেমন: নতুন IELTS ব্যাচে ভর্তি চলছে!" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="noticeCategory">ক্যাটাগরি</label>
+                        <select id="noticeCategory" class="form-control">
+                            <option value="ভর্তি বিজ্ঞপ্তি">ভর্তি বিজ্ঞপ্তি (Circular)</option>
+                            <option value="জরুরি নোটিশ">জরুরি নোটিশ (Urgent Notice)</option>
+                            <option value="ক্লাস শিডিউল">ক্লাস শিডিউল (Schedule)</option>
+                            <option value="অফার">বিশেষ ছাড় / অফার (Offer)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="noticeDate">তারিখ</label>
+                        <input type="text" id="noticeDate" class="form-control" placeholder="যেমন: ০৮ নভেম্বর ২০২৬">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="noticeSeats">আসন সংখ্যা ও তথ্য (ভর্তি বিজ্ঞপ্তির জন্য)</label>
+                        <input type="text" id="noticeSeats" class="form-control" placeholder="যেমন: মাত্র ১৫টি আসন বাকি">
+                    </div>
+                    <div class="form-group">
+                        <label for="noticeFee">কোর্স ফি / ব্যাচ শুরুর তারিখ</label>
+                        <input type="text" id="noticeFee" class="form-control" placeholder="যেমন: ক্লাস শুরু: ১৫ নভেম্বর | ফি: ৳৪,৫০০">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="noticeDetails">বিস্তারিত বিবরণ</label>
+                    <textarea id="noticeDetails" class="form-control" rows="3" required></textarea>
+                </div>
+
+                <div class="form-group" style="background: #f8f9fc; padding: 12px; border-radius: 8px;">
+                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; margin-bottom: 6px;">
+                        <input type="checkbox" id="noticeActiveTopBar" checked>
+                        <strong>শীর্ষ নোটিশ বারে প্রদর্শন করুন (Active on Top Notice Bar)</strong>
+                    </label>
+                    <small style="color: #64748b;">টিক দেওয়া থাকলে ওয়েবসাইটের একদম উপরে নোটিশ বারে সক্রিয় থাকবে।</small>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline modal-cancel">বাতিল</button>
+                    <button type="submit" class="btn btn-gold">সংরক্ষণ করুন ✓</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 5. GALLERY MODAL (ডিভাইস থেকে আপলোড বা লিংক) -->
+    <div class="modal-overlay" id="galleryModal">
+        <div class="modal-dialog">
+            <button class="modal-close">&times;</button>
+            <div class="modal-header">
+                <h3 id="galleryModalTitle">গ্যালারিতে ছবি যোগ করুন</h3>
+            </div>
+            <form id="galleryForm" onsubmit="handleGallerySubmit(event)">
+                
+                <div class="form-group">
+                    <label>ছবি নির্বাচন (ডিভাইস থেকে আপলোড বা সরাসরি লিংক)</label>
+                    <div class="image-input-container">
+                        <div class="image-picker-tabs">
+                            <button type="button" class="image-tab-btn active" onclick="switchImageInputMode('galleryImg', 'upload')">📁 ডিভাইস থেকে আপলোড</button>
+                            <button type="button" class="image-tab-btn" onclick="switchImageInputMode('galleryImg', 'link')">🔗 সরাসরি লিংক</button>
+                        </div>
+                        <div id="galleryImg-upload-box">
+                            <input type="file" accept="image/*" class="form-control" onchange="handleFileUpload(event, 'galleryImgInput', 'galleryImgPreview')">
+                        </div>
+                        <div id="galleryImg-link-box" style="display: none;">
+                            <input type="text" id="galleryImgInput" class="form-control" placeholder="images/sir_pic_3.jpg বা https://..." oninput="updateImagePreview('galleryImgInput', 'galleryImgPreview')">
+                        </div>
+                        <img id="galleryImgPreview" src="images/sir_pic_3.jpg" class="image-preview-thumb" alt="Gallery Preview">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="galleryCaption">ক্যাপশন / শিরোনাম *</label>
+                    <input type="text" id="galleryCaption" class="form-control" placeholder="যেমন: ক্লাসরুম ড্রিলিং সেশন" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="galleryCategory">ক্যাটাগরি</label>
+                    <input type="text" id="galleryCategory" class="form-control" placeholder="যেমন: ক্লাসরুম / সেমিনার / একাডেমি">
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline modal-cancel">বাতিল</button>
+                    <button type="submit" class="btn btn-gold">ছবি যোগ করুন ✓</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 6. ORDER STATUS MODAL -->
+    <div class="modal-overlay" id="orderStatusModal">
+        <div class="modal-dialog" style="max-width: 450px;">
+            <button class="modal-close">&times;</button>
+            <div class="modal-header">
+                <h3>অর্ডার স্ট্যাটাস পরিবর্তন</h3>
+            </div>
+            <input type="hidden" id="statusOrderId">
+            <div class="form-group">
+                <label for="selectOrderStatus">বর্তমান স্ট্যাটাস নির্বাচন করুন</label>
+                <select id="selectOrderStatus" class="form-control" style="font-size: 1rem; padding: 10px;">
+                    <option value="পেন্ডিং">পেন্ডিং (Pending)</option>
+                    <option value="কনফার্মড">কনফার্মড (Confirmed)</option>
+                    <option value="ডেলিভারির পথে">ডেলিভারির পথে (Shipped)</option>
+                    <option value="ডেলিভারি সম্পন্ন">ডেলিভারি সম্পন্ন (Delivered)</option>
+                    <option value="বাতিল">বাতিল (Cancelled)</option>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline modal-cancel">বাতিল</button>
+                <button type="button" class="btn btn-gold" onclick="saveOrderStatus()">আপডেট করুন ✓</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 7. ADMISSION STATUS MODAL -->
+    <div class="modal-overlay" id="admissionStatusModal">
+        <div class="modal-dialog" style="max-width: 450px;">
+            <button class="modal-close">&times;</button>
+            <div class="modal-header">
+                <h3>ভর্তি আবেদন স্ট্যাটাস পরিবর্তন</h3>
+            </div>
+            <input type="hidden" id="statusAdmissionId">
+            <div class="form-group">
+                <label for="selectAdmissionStatus">বর্তমান স্ট্যাটাস (Approve / Reject)</label>
+                <select id="selectAdmissionStatus" class="form-control" style="font-size: 1rem; padding: 10px;">
+                    <option value="নতুন আবেদন">নতুন আবেদন (New)</option>
+                    <option value="অনুমোদিত (Approved)">অনুমোদিত (Approved)</option>
+                    <option value="যোগাযোগ হয়েছে">যোগাযোগ হয়েছে (Contacted)</option>
+                    <option value="ভর্তি সম্পন্ন">ভর্তি সম্পন্ন (Enrolled)</option>
+                    <option value="বাতিল (Rejected)">বাতিল (Rejected)</option>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline modal-cancel">বাতিল</button>
+                <button type="button" class="btn btn-gold" onclick="saveAdmissionStatus()">আপডেট করুন ✓</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Element -->
+    <div id="adminToast" class="admin-toast"></div>
+
+    <!-- External Admin JavaScript -->
+    <script src="js/admin.js"></script>
+</body>
+</html>
